@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
+import PropTypes from 'prop-types';
+import { createPlayer } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -8,6 +12,10 @@ class Login extends Component {
       email: '',
     };
   }
+
+  /* componentDidMount = () => {
+    addPlayer();
+  } */
 
   verifyNameAndEmail = () => {
     const { name, email } = this.state;
@@ -25,7 +33,11 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log('teste');
+    const { name, email } = this.state;
+    const hashEmail = md5(email).toString();
+    const { addPlayer, history } = this.props;
+    addPlayer({ name, hashEmail });
+    history.push('/game');
   }
 
   render() {
@@ -70,4 +82,16 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  addPlayer: (status) => dispatch(createPlayer(status)),
+
+});
+
+Login.propTypes = {
+  addPlayer: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
