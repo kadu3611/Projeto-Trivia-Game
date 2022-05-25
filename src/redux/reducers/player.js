@@ -2,7 +2,7 @@ import { CREATE_PLAYER } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
 };
@@ -14,6 +14,8 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.payload.name,
       gravatarEmail: action.payload.hashEmail,
+      score: action.payload.score,
+      assertions: action.payload.assertions,
 
     };
   default:
