@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { createPlayer } from '../redux/actions';
 
 class Login extends Component {
@@ -76,6 +77,14 @@ class Login extends Component {
               Play
             </button>
           </form>
+          <Link to="/settings">
+            <button
+              data-testid="btn-settings"
+              type="button"
+            >
+              Settings
+            </button>
+          </Link>
         </section>
       </main>
     );
