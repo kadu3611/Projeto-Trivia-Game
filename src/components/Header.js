@@ -34,7 +34,7 @@ function mapStateToProps(state) {
 Header.propTypes = {
   hashEmail: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  score: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(Header);
