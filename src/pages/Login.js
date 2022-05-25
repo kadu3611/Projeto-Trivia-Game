@@ -4,6 +4,7 @@ import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { createPlayer } from '../redux/actions';
+import { getToken, saveToken } from '../services/localStorage';
 
 class Login extends Component {
   constructor() {
@@ -33,25 +34,27 @@ class Login extends Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     const { name, email, score } = this.state;
-    const hashEmail = md5(email).toString();
     const { addPlayer, history } = this.props;
+    const hashEmail = md5(email).toString();
     addPlayer({ name, hashEmail, score });
+    if (getToken() !== null) {
+      history.push('/game');
+    } else {
+      saveToken(await this.fetchAPIToken());
+      history.push('/game');
+    }
     history.push('/game');
   }
 
-  handleClick = async (event) => {
-    event.preventDefault();
+  fetchAPIToken = async () => {
     try {
       const response = await fetch('https://opentdb.com/api_token.php?command=request');
       const result = await response.json();
       const { token } = result;
-      console.log(token);
-      localStorage.setItem('token', token);
-      const { history } = this.props;
-      history.push('/game');
+      return token;
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +92,6 @@ class Login extends Component {
               data-testid="btn-play"
               type="submit"
               disabled={ this.verifyNameAndEmail() }
-              onClick={ this.handleClick }
             >
               Play
             </button>
