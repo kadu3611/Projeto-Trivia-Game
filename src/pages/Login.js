@@ -42,6 +42,21 @@ class Login extends Component {
     history.push('/game');
   }
 
+  handleClick = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('https://opentdb.com/api_token.php?command=request');
+      const result = await response.json();
+      const { token } = result;
+      console.log(token);
+      localStorage.setItem('token', token);
+      const { history } = this.props;
+      history.push('/game');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     const { name, email } = this.state;
     return (
@@ -74,6 +89,7 @@ class Login extends Component {
               data-testid="btn-play"
               type="submit"
               disabled={ this.verifyNameAndEmail() }
+              onClick={ this.handleClick }
             >
               Play
             </button>
