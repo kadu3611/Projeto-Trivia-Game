@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { createPlayer } from '../redux/actions';
 
 class Login extends Component {
@@ -41,6 +41,20 @@ class Login extends Component {
     history.push('/game');
   }
 
+  handleClick = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('https://opentdb.com/api_token.php?command=request');
+      const result = await response.json();
+      console.log(result);
+      localStorage.setItem('token', result);
+      const { history } = this.props;
+      history.push('/game');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     const { name, email } = this.state;
     return (
@@ -73,6 +87,7 @@ class Login extends Component {
               data-testid="btn-play"
               type="submit"
               disabled={ this.verifyNameAndEmail() }
+              onClick={ this.handleClick }
             >
               Play
             </button>
