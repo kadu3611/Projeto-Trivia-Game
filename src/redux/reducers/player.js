@@ -14,6 +14,8 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.payload.name,
       gravatarEmail: action.payload.hashEmail,
+      score: action.payload.score,
+      assertions: action.payload.assertions,
 
     };
   default:
