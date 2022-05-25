@@ -80,7 +80,7 @@ class Login extends Component {
           <Link to="/settings">
             <button
               data-testid="btn-settings"
-              type="button"
+              type="submit"
             >
               Settings
             </button>
