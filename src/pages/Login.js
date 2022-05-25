@@ -35,8 +35,8 @@ class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { name, email } = this.state;
-    const hashEmail = md5(email).toString();
     const { addPlayer, history } = this.props;
+    const hashEmail = md5(email).toString();
     addPlayer({ name, hashEmail });
     history.push('/game');
   }

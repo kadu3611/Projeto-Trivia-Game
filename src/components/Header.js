@@ -8,13 +8,16 @@ class Header extends Component {
     // https://www.gravatar.com/avatar/${hash-gerada}
     return (
       <header>
-        <img data-testid="header-profile-picture" src={ `https://www.gravatar.com/avatar/${hashEmail}` } alt="imagem Gravatar" />
+        <img
+          data-testid="header-profile-picture"
+          src={ `https://www.gravatar.com/avatar/${hashEmail}` }
+          alt="imagem Gravatar"
+        />
         <p data-testid="header-player-name">
           {name}
         </p>
         <p data-testid="header-score">
-          Pontuação:
-          {score}
+          { `Pontuação: ${score}` }
         </p>
       </header>
     );
