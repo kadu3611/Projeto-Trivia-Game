@@ -30,6 +30,16 @@ class Feedback extends Component {
     }
   }
 
+  clickPlay = () => {
+    const { history } = this.props;
+    history.push('/game');
+  }
+
+  clickRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  }
+
   render() {
     const { feedBackScore } = this.state;
     const { score, assertions } = this.props;
@@ -50,6 +60,22 @@ class Feedback extends Component {
           {' '}
           {assertions}
         </p>
+        <button
+          data-testid="btn-play-again"
+          type="button"
+          onClick={ this.clickPlay }
+        >
+          Play Again
+
+        </button>
+        <button
+          data-testid="btn-ranking"
+          type="button"
+          onClick={ this.clickRanking }
+        >
+          Ranking
+
+        </button>
       </main>
     );
   }
@@ -64,5 +90,9 @@ function mapStateToProps(state) {
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 export default connect(mapStateToProps)(Feedback);
+// Play Again
