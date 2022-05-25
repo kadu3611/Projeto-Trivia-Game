@@ -4,12 +4,14 @@ import Login from './pages/Login';
 // import logo from './trivia.png';
 import './App.css';
 import GameScreen from './pages/GameScreen';
+import Settings from './pages/Settings';
 
 export default function App() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
       <Route exact path="/game" component={ GameScreen } />
+      <Route exact path="/settings" component={ Settings } />
     </Switch>
   );
 }
