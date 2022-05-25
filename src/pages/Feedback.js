@@ -23,7 +23,7 @@ class Feedback extends Component {
       this.setState({
         feedBackScore: 'Could be better...',
       });
-    } else if (scoreNumber <= TREE) {
+    } else if (scoreNumber >= TREE) {
       this.setState({
         feedBackScore: 'Well Done!',
       });
@@ -32,7 +32,7 @@ class Feedback extends Component {
 
   render() {
     const { feedBackScore } = this.state;
-    const { score } = this.props;
+    const { score, assertions } = this.props;
     return (
       <main>
         <Header />
@@ -47,7 +47,8 @@ class Feedback extends Component {
         </p>
         <p data-testid="feedback-total-question">
           Total question:
-          {}
+          {' '}
+          {assertions}
         </p>
       </main>
     );
@@ -56,10 +57,12 @@ class Feedback extends Component {
 function mapStateToProps(state) {
   return {
     score: state.player.score,
+    assertions: state.player.assertions,
   };
 }
 
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
+  assertions: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps)(Feedback);
