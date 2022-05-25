@@ -48,7 +48,7 @@ class Login extends Component {
       const result = await response.json();
       const { token } = result;
       console.log(token);
-      localStorage.setItem('token', JSON.stringify(token));
+      localStorage.setItem('token', token);
       const { history } = this.props;
       history.push('/game');
     } catch (error) {
