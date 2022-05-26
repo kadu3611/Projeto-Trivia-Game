@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 class Header extends Component {
   render() {
     const { hashEmail, name, score } = this.props;
-    console.log(hashEmail);
     return (
       <header>
         <img

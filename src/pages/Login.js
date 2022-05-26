@@ -15,10 +15,6 @@ class Login extends Component {
     };
   }
 
-  /* componentDidMount = () => {
-    addPlayer();
-  } */
-
   verifyNameAndEmail = () => {
     const { name, email } = this.state;
     const verifyEmail = /[^A-Z][a-z0-9_\-.]+@+[^A-Z]+\.com/.test(email);
@@ -35,10 +31,10 @@ class Login extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const { name, email, score } = this.state;
+    const { name, email } = this.state;
     const { addPlayer, history } = this.props;
     const hashEmail = md5(email).toString();
-    addPlayer({ name, hashEmail, score });
+    addPlayer({ name, hashEmail });
     if (getToken() !== null) {
       history.push('/game');
     } else {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import { fetchQuestions } from '../redux/actions';
 import { removeToken, getToken } from '../services/localStorage';
+import Loading from './Loading';
 
 // magic number
 const EXPIRED_TOKEN = 3;
@@ -45,7 +46,6 @@ class GameScreen extends Component {
   selectQuestion = () => {
     const { history } = this.props;
     const { questionsData } = this.state;
-    console.log('state original', questionsData);
     const choosedQuestion = questionsData[0];
     const answers = [
       ...choosedQuestion.incorrect_answers,
@@ -77,12 +77,11 @@ class GameScreen extends Component {
 
   render() {
     const { selectedAsk, isLoading, alternatives } = this.state;
-    console.log(selectedAsk);
     if (isLoading) {
       return (
         <>
           <Header />
-          <p>CARREGANDO...</p>
+          <Loading />
         </>
       );
     }
