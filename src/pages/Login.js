@@ -4,6 +4,7 @@ import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { createPlayer } from '../redux/actions';
+import { getToken, saveToken } from '../services/localStorage';
 
 class Login extends Component {
   constructor() {
@@ -32,13 +33,30 @@ class Login extends Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    const { name, email } = this.state;
+    const { name, email, score } = this.state;
     const { addPlayer, history } = this.props;
     const hashEmail = md5(email).toString();
-    addPlayer({ name, hashEmail });
+    addPlayer({ name, hashEmail, score });
+    if (getToken() !== null) {
+      history.push('/game');
+    } else {
+      saveToken(await this.fetchAPIToken());
+      history.push('/game');
+    }
     history.push('/game');
+  }
+
+  fetchAPIToken = async () => {
+    try {
+      const response = await fetch('https://opentdb.com/api_token.php?command=request');
+      const result = await response.json();
+      const { token } = result;
+      return token;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
