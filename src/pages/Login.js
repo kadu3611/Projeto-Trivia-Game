@@ -11,7 +11,6 @@ class Login extends Component {
     this.state = {
       name: '',
       email: '',
-      score: 0,
     };
   }
 
@@ -35,10 +34,10 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { name, email, score } = this.state;
-    const hashEmail = md5(email).toString();
+    const { name, email } = this.state;
     const { addPlayer, history } = this.props;
-    addPlayer({ name, hashEmail, score });
+    const hashEmail = md5(email).toString();
+    addPlayer({ name, hashEmail });
     history.push('/game');
   }
 
