@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
 import { playAsseritions } from '../redux/actions/index';
+import Cronometro from '../components/Cronometro';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -35,14 +36,6 @@ class GameScreen extends Component {
       });
       this.selectQuestion();
     }
-    const TREZENTOS_MILESSEGUNDOS = 300;
-    this.timerID = setInterval(this.tick(), TREZENTOS_MILESSEGUNDOS);
-  }
-
-  tick = () => {
-    this.setState((prev) => ({
-      currentTime: prev.currentTime + 1,
-    }));
   }
 
   fetchQuestions = async () => {
@@ -97,6 +90,7 @@ class GameScreen extends Component {
     return (
       <>
         <Header />
+        <Cronometro />
         <main>
           <section>
             <p>{currentTime}</p>
