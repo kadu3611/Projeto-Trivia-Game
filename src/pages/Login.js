@@ -35,11 +35,9 @@ class Login extends Component {
     const { addPlayer, history } = this.props;
     const hashEmail = md5(email).toString();
     addPlayer({ name, hashEmail });
-    if (getToken() !== null) {
-      history.push('/game');
-    } else {
+
+    if (getToken() === null) {
       saveToken(await this.fetchAPIToken());
-      history.push('/game');
     }
     history.push('/game');
   }
@@ -112,9 +110,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 Login.propTypes = {
   addPlayer: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  history: PropTypes.objectOf.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);

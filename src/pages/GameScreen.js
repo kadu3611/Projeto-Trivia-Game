@@ -11,7 +11,7 @@ class GameScreen extends Component {
   constructor() {
     super();
     this.state = {
-      isLoading: false,
+      isLoading: true,
       questionsResults: [],
       selectedAsk: {},
       alternatives: [],
@@ -21,9 +21,6 @@ class GameScreen extends Component {
   async componentDidMount() {
     const { history } = this.props;
 
-    this.setState({
-      isLoading: true,
-    });
     const APIdata = await this.fetchQuestions();
 
     if (APIdata.length === 0) {
@@ -56,8 +53,10 @@ class GameScreen extends Component {
     const questionsData = [...questionsResults];
 
     if (questionsData.length > 0) {
-      const choosedQuestion = questionsData.shift();
-      console.log('quem é choosedQuestion?', choosedQuestion);
+      const choosedQuestion = questionsData[0];
+
+      const filteredQuestions = questionsData
+        .filter((question) => question.correct_answer !== choosedQuestion.correct_answer);
 
       const answers = [
         ...choosedQuestion.incorrect_answers,
@@ -67,9 +66,9 @@ class GameScreen extends Component {
       this.setState({
         selectedAsk: choosedQuestion,
         alternatives: answers,
+        questionsResults: filteredQuestions,
       });
     } else {
-      console.log('redirecionou para feedback?');
       history.push('/feedback');
     }
   }
