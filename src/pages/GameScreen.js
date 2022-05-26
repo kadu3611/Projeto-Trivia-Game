@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
+import { playAsseritions } from '../redux/actions/index';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -33,6 +35,14 @@ class GameScreen extends Component {
       });
       this.selectQuestion();
     }
+    const TREZENTOS_MILESSEGUNDOS = 300;
+    this.timerID = setInterval(this.tick(), TREZENTOS_MILESSEGUNDOS);
+  }
+
+  tick = () => {
+    this.setState((prev) => ({
+      currentTime: prev.currentTime + 1,
+    }));
   }
 
   fetchQuestions = async () => {
@@ -74,7 +84,8 @@ class GameScreen extends Component {
   }
 
   render() {
-    const { selectedAsk, isLoading, alternatives } = this.state;
+    const { selectedAsk, isLoading, alternatives, currentTime } = this.state;
+    const { newScore } = this.props;
     if (isLoading) {
       return (
         <>
@@ -88,6 +99,7 @@ class GameScreen extends Component {
         <Header />
         <main>
           <section>
+            <p>{currentTime}</p>
             <p data-testid="question-category">{selectedAsk.category}</p>
             <p data-testid="question-text">{selectedAsk.question}</p>
           </section>
@@ -100,6 +112,7 @@ class GameScreen extends Component {
                   <button
                     key={ answer }
                     type="button"
+                    onClick={ () => newScore() }
                     data-testid="correct-answer"
                   >
                     { answer }
@@ -133,6 +146,10 @@ GameScreen.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  newScore: PropTypes.func.isRequired,
 };
+const mapDispatchToProps = (dispatch) => ({
+  newScore: (score) => dispatch(playAsseritions(score)),
+});
 
-export default GameScreen;
+export default connect(null, mapDispatchToProps)(GameScreen);
