@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { fetchQuestions } from '../redux/actions';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
 
 // magic number
-const EXPIRED_TOKEN = 3;
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
 
 class GameScreen extends Component {
@@ -15,65 +12,67 @@ class GameScreen extends Component {
     super();
     this.state = {
       isLoading: false,
-      questionsData: [],
+      questionsResults: [],
       selectedAsk: {},
       alternatives: [],
     };
   }
 
   async componentDidMount() {
-    const { dispatch, history } = this.props;
+    const { history } = this.props;
 
     this.setState({
       isLoading: true,
     });
+    const APIdata = await this.fetchQuestions();
 
-    const verifyExpiredToken = await this.checkExpiredToken();
-
-    if (verifyExpiredToken) {
+    if (APIdata.length === 0) {
       removeToken();
       history.push('/');
     } else {
       this.setState({
-        questionsData: await dispatch(fetchQuestions()),
+        questionsResults: APIdata,
         isLoading: false,
       });
-    }
-
-    this.selectQuestion();
-  }
-
-  selectQuestion = () => {
-    const { history } = this.props;
-    const { questionsData } = this.state;
-    const choosedQuestion = questionsData[0];
-    const answers = [
-      ...choosedQuestion.incorrect_answers,
-      choosedQuestion.correct_answer,
-    ].sort(() => Math.random() - SORT_WITH_NEGATIVE_NUMBERS);
-    if (questionsData.length > 0) {
-      this.setState((prevState) => ({
-        selectedAsk: choosedQuestion,
-        alternatives: answers,
-        questionsData: prevState.questionsData
-          .filter((question) => question !== choosedQuestion),
-      }));
-    } else {
-      history.push('/feedback');
+      this.selectQuestion();
     }
   }
 
-  checkExpiredToken = async () => {
+  fetchQuestions = async () => {
     try {
       const URL = `https://opentdb.com/api.php?amount=5&token=${getToken()}`;
       const response = await fetch(URL);
       const data = await response.json();
-      if (data.response_code === EXPIRED_TOKEN) return true;
-      return false;
+      return data.results;
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+
+  selectQuestion = () => {
+    const { history } = this.props;
+    const { questionsResults } = this.state;
+
+    const questionsData = [...questionsResults];
+
+    if (questionsData.length > 0) {
+      const choosedQuestion = questionsData.shift();
+      console.log('quem é choosedQuestion?', choosedQuestion);
+
+      const answers = [
+        ...choosedQuestion.incorrect_answers,
+        choosedQuestion.correct_answer,
+      ].sort(() => Math.random() - SORT_WITH_NEGATIVE_NUMBERS);
+
+      this.setState({
+        selectedAsk: choosedQuestion,
+        alternatives: answers,
+      });
+    } else {
+      console.log('redirecionou para feedback?');
+      history.push('/feedback');
+    }
+  }
 
   render() {
     const { selectedAsk, isLoading, alternatives } = this.state;
@@ -120,8 +119,9 @@ class GameScreen extends Component {
             <button
               type="button"
               onClick={ this.selectQuestion }
+              data-testid="btn-next"
             >
-              Próxima Pergunta
+              Next
             </button>
           </section>
         </main>
@@ -131,10 +131,9 @@ class GameScreen extends Component {
 }
 
 GameScreen.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
 
-export default connect()(GameScreen);
+export default GameScreen;
