@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
-import { increaseAssertions } from '../redux/actions/index';
+import { increaseAssertions } from '../redux/actions';
+import './GameScreen.css';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -19,6 +20,8 @@ class GameScreen extends Component {
       questionsResults: [],
       selectedAsk: {},
       alternatives: [],
+      buttonNext: false,
+      clicked: false,
       seconds: 30,
       button: false,
       multiplier: 0,
@@ -96,6 +99,8 @@ class GameScreen extends Component {
         selectedAsk: choosedQuestion,
         alternatives: answers,
         questionsResults: filteredQuestions,
+        clicked: false,
+        buttonNext: false,
         seconds: 30,
         multiplier: questionMultiplier,
       });
@@ -104,15 +109,26 @@ class GameScreen extends Component {
     }
   }
 
+  onClickFun = () => {
+    this.setState({
+      clicked: true,
+      buttonNext: true,
+    });
+  }
+
   sendScore = () => {
     const { seconds, multiplier } = this.state;
     const { newScore } = this.props;
     newScore({ seconds, multiplier });
+    this.setState({
+      clicked: true,
+      buttonNext: true,
+    });
   }
 
   render() {
     const { selectedAsk, isLoading, alternatives,
-      currentTime, seconds, button } = this.state;
+      currentTime, seconds, button, clicked, buttonNext } = this.state;
 
     if (isLoading) {
       return (
@@ -147,6 +163,7 @@ class GameScreen extends Component {
                     type="button"
                     onClick={ this.sendScore }
                     data-testid="correct-answer"
+                    className={ clicked && 'green' }
                     disabled={ button }
                   >
                     { answer }
@@ -156,6 +173,8 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid={ `wrong-answer-${index}` }
+                    onClick={ this.onClickFun }
+                    className={ clicked && 'red' }
                     disabled={ button }
                   >
                     { answer }
@@ -163,13 +182,15 @@ class GameScreen extends Component {
                 )
               ))
             }
-            <button
-              type="button"
-              onClick={ this.selectQuestion }
-              data-testid="btn-next"
-            >
-              Next
-            </button>
+            { buttonNext && (
+              <button
+                type="button"
+                onClick={ this.selectQuestion }
+                data-testid="btn-next"
+              >
+                Next
+              </button>
+            )}
           </section>
         </main>
       </>

@@ -1,6 +1,6 @@
 import { CREATE_PLAYER, INCREASE_ASSERTIONS } from '../actions/index';
 
-const DEZ = 10; // MagicNumber
+const scoreAdder = 10; // MagicNumber
 
 const INITIAL_STATE = {
   name: '',
@@ -21,7 +21,9 @@ const playerReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       assertions: state.assertions + 1,
-      score: state.score + (DEZ + (action.payload.seconds * action.payload.multiplier)),
+      score: state.score + (
+        scoreAdder + (action.payload.seconds * action.payload.multiplier)
+      ),
     };
   default:
     return state;
