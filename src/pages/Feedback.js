@@ -16,8 +16,8 @@ class Feedback extends Component {
   }
 
   testScore = () => {
-    const { score } = this.props;
-    const scoreNumber = score;
+    const { assertions } = this.props;
+    const scoreNumber = assertions;
     const TREE = 3;
     if (scoreNumber < TREE) {
       this.setState({
@@ -32,7 +32,7 @@ class Feedback extends Component {
 
   clickPlay = () => {
     const { history } = this.props;
-    history.push('/game');
+    history.push('/');
   }
 
   clickRanking = () => {
@@ -46,19 +46,19 @@ class Feedback extends Component {
     return (
       <main>
         <Header />
-        <p data-testid="feedback-text">
+        <p>
           Feedback score:
           {' '}
-          { feedBackScore }
+          <span data-testid="feedback-text">{ feedBackScore }</span>
         </p>
-        <p data-testid="feedback-total-score">
+        <p>
           Score Total:
-          {score}
+          <span data-testid="feedback-total-score">{ score }</span>
         </p>
-        <p data-testid="feedback-total-question">
+        <p>
           Total question:
           {' '}
-          {assertions}
+          <span data-testid="feedback-total-question">{assertions}</span>
         </p>
         <button
           data-testid="btn-play-again"
@@ -96,3 +96,4 @@ Feedback.propTypes = {
 };
 export default connect(mapStateToProps)(Feedback);
 // Play Again
+// assertions: PropTypes.number.isRequired,

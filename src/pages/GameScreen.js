@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
+import '../App.css';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -15,6 +16,8 @@ class GameScreen extends Component {
       questionsResults: [],
       selectedAsk: {},
       alternatives: [],
+      buttonNext: false,
+      clicked: false,
     };
   }
 
@@ -67,19 +70,23 @@ class GameScreen extends Component {
         selectedAsk: choosedQuestion,
         alternatives: answers,
         questionsResults: filteredQuestions,
+        clicked: false,
+        buttonNext: false,
       });
     } else {
       history.push('/feedback');
     }
   }
 
-  onClickFunc = () => {
-    document.getElementById('correct').style.border = '3px solid rgb(6, 240, 15)';
-    document.getElementById('wrong').style.border = '3px solid red';
+  onClickFun = () => {
+    this.setState({
+      clicked: true,
+      buttonNext: true,
+    });
   }
 
   render() {
-    const { selectedAsk, isLoading, alternatives } = this.state;
+    const { selectedAsk, isLoading, alternatives, clicked, buttonNext } = this.state;
     if (isLoading) {
       return (
         <>
@@ -106,8 +113,8 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid="correct-answer"
-                    id="correct"
-                    onClick={ this.onClickFunc }
+                    onClick={ this.onClickFun }
+                    className={ clicked && 'green' }
                   >
                     { answer }
                   </button>
@@ -116,21 +123,23 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid={ `wrong-answer-${index}` }
-                    id="wrong"
-                    onClick={ this.onClickFunc }
+                    onClick={ this.onClickFun }
+                    className={ clicked && 'red' }
                   >
                     { answer }
                   </button>
                 )
               ))
             }
-            <button
-              type="button"
-              onClick={ this.selectQuestion }
-              data-testid="btn-next"
-            >
-              Next
-            </button>
+            { buttonNext && (
+              <button
+                type="button"
+                onClick={ this.selectQuestion }
+                data-testid="btn-next"
+              >
+                Next
+              </button>
+            )}
           </section>
         </main>
       </>
