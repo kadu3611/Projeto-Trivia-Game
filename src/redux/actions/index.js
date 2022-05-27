@@ -10,11 +10,7 @@ export const createPlayer = (value) => ({
   type: CREATE_PLAYER,
   payload: value,
 });
-export const increaseAssertions = (secodsAndDifficulty) => ({
+export const increaseAssertions = (scoreData) => ({
   type: INCREASE_ASSERTIONS,
-  payload: secodsAndDifficulty,
+  payload: scoreData,
 });
-/* export const increaseScore = (value) => ({
-  type: INCREASE_SCORE,
-  payload: value,
-}); */

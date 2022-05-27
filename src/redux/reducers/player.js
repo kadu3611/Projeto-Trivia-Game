@@ -18,12 +18,10 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       gravatarEmail: action.payload.hashEmail,
     };
   case INCREASE_ASSERTIONS:
-    console.log(action);
     return {
       ...state,
       assertions: state.assertions + 1,
-      score: state.score + (DEZ + (action.payload.seconds * action.payload.difficulty)),
-      // 10 + (timer * dificuldade)
+      score: state.score + (DEZ + (action.payload.seconds * action.payload.multiplier)),
     };
   default:
     return state;
