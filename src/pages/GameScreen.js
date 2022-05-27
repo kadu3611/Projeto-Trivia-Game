@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
-import { playAsseritions } from '../redux/actions/index';
-import Cronometro from '../components/Cronometro';
+import { increaseAssertions } from '../redux/actions/index';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -90,7 +89,6 @@ class GameScreen extends Component {
     return (
       <>
         <Header />
-        <Cronometro />
         <main>
           <section>
             <p>{currentTime}</p>

@@ -4,7 +4,7 @@ class Stopwatch extends Component {
   constructor() {
     super();
     this.state = {
-     stopwatch: 0,
+      timer: 0,
     };
   }
 
@@ -20,15 +20,15 @@ tick = () => {
 }
 
 render() {
-  const { timewatch } = this.state;
+  const { timer } = this.state;
   return (
     <p>
       {' '}
-      {cronometro}
+      {timer}
       {' '}
     </p>
   );
 }
 }
 
-export default Cronometro;
+export default Stopwatch;
