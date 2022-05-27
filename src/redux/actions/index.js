@@ -9,6 +9,6 @@ export const createPlayer = (value) => ({
   type: CREATE_PLAYER,
   payload: value,
 });
-export const playAsseritions = () => ({
-  type: PLAY_ASSERTIONS,
+export const increaseAssertions = () => ({
+  type: INCREASE_ASSERTIONS,
 });
