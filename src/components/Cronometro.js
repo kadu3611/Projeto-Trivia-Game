@@ -4,7 +4,7 @@ class Stopwatch extends Component {
   constructor() {
     super();
     this.state = {
-      cronometro: 0,
+     stopwatch: 0,
     };
   }
 
