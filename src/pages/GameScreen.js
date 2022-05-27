@@ -143,7 +143,7 @@ GameScreen.propTypes = {
   newScore: PropTypes.func.isRequired,
 };
 const mapDispatchToProps = (dispatch) => ({
-  newScore: (score) => dispatch(playAsseritions(score)),
+  newScore: (score) => dispatch(increaseAssertions(score)),
 });
 
 export default connect(null, mapDispatchToProps)(GameScreen);
