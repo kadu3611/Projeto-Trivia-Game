@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Cronometro extends Component {
+class Stopwatch extends Component {
   constructor() {
     super();
     this.state = {
