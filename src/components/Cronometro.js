@@ -9,7 +9,7 @@ class Stopwatch extends Component {
   }
 
 componentDidMount = () => {
-  const TREZENTOS_MILESSEGUNDOS = 300;
+  const TIME_LIMIT = 30000;
   this.timerID = setInterval(this.tick(), TREZENTOS_MILESSEGUNDOS);
 }
 
