@@ -15,8 +15,7 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       name: action.payload.name,
       gravatarEmail: action.payload.hashEmail,
     };
-  case PLAY_ASSERTIONS:
-    console.log(action);
+  case INCREASE_ASSERTIONS:
     return {
       ...state,
       assertions: state.assertions + 1,
