@@ -1,4 +1,4 @@
-import { CREATE_PLAYER } from '../actions/index';
+import { CREATE_PLAYER, INCREASE_ASSERTIONS } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
@@ -14,6 +14,11 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.payload.name,
       gravatarEmail: action.payload.hashEmail,
+    };
+  case INCREASE_ASSERTIONS:
+    return {
+      ...state,
+      assertions: state.assertions + 1,
     };
   default:
     return state;
