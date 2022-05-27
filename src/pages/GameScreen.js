@@ -17,6 +17,9 @@ class GameScreen extends Component {
       questionsResults: [],
       selectedAsk: {},
       alternatives: [],
+      seconds: 30,
+      button: false,
+      difficulty: 0,
     };
   }
 
@@ -35,6 +38,18 @@ class GameScreen extends Component {
       });
       this.selectQuestion();
     }
+    this.minhaVariavelInterval();
+  }
+
+  minhaVariavelInterval = () => {
+    const ONE_SECOND = 1000;
+    setInterval(() => {
+      const { seconds } = this.state;
+      this.setState((prevState) => ({
+        seconds: prevState.seconds === 0 ? 0 : prevState.seconds - 1,
+        button: seconds === 0,
+      }));
+    }, ONE_SECOND);// ONE_SECOND é o quanto ele quer contar por vez
   }
 
   fetchQuestions = async () => {
@@ -59,16 +74,27 @@ class GameScreen extends Component {
 
       const filteredQuestions = questionsData
         .filter((question) => question.correct_answer !== choosedQuestion.correct_answer);
-
       const answers = [
         ...choosedQuestion.incorrect_answers,
         choosedQuestion.correct_answer,
       ].sort(() => Math.random() - SORT_WITH_NEGATIVE_NUMBERS);
 
+      let valor = 0;
+      const TREE = 3; // MagicNumber
+      if (choosedQuestion.difficulty === 'hard') {
+        valor = TREE;
+      } else if (choosedQuestion.difficulty === 'medium') {
+        valor = 2;
+      } else {
+        valor = 1;
+      }
+
       this.setState({
         selectedAsk: choosedQuestion,
         alternatives: answers,
         questionsResults: filteredQuestions,
+        seconds: 30,
+        difficulty: valor,
       });
     } else {
       history.push('/feedback');
@@ -76,7 +102,9 @@ class GameScreen extends Component {
   }
 
   render() {
-    const { selectedAsk, isLoading, alternatives, currentTime } = this.state;
+    const { selectedAsk, isLoading, alternatives,
+      currentTime, seconds, button, difficulty } = this.state;
+    const secodsAndDifficulty = { seconds, difficulty };
     const { newScore } = this.props;
     if (isLoading) {
       return (
@@ -89,6 +117,11 @@ class GameScreen extends Component {
     return (
       <>
         <Header />
+        <p>
+          Time:
+          {' '}
+          <span>{seconds}</span>
+        </p>
         <main>
           <section>
             <p>{currentTime}</p>
@@ -104,8 +137,9 @@ class GameScreen extends Component {
                   <button
                     key={ answer }
                     type="button"
-                    onClick={ () => newScore() }
+                    onClick={ () => newScore(secodsAndDifficulty) }
                     data-testid="correct-answer"
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -114,6 +148,7 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid={ `wrong-answer-${index}` }
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -141,7 +176,7 @@ GameScreen.propTypes = {
   newScore: PropTypes.func.isRequired,
 };
 const mapDispatchToProps = (dispatch) => ({
-  newScore: (score) => dispatch(increaseAssertions(score)),
+  newScore: (secodsAndDifficulty) => dispatch(increaseAssertions(secodsAndDifficulty)),
 });
 
 export default connect(null, mapDispatchToProps)(GameScreen);
