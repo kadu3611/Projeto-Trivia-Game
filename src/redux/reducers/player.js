@@ -1,4 +1,4 @@
-import { CREATE_PLAYER, PLAY_ASSERTIONS } from '../actions/index';
+import { CREATE_PLAYER, INCREASE_ASSERTIONS } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
