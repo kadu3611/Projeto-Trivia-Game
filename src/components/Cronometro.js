@@ -20,7 +20,7 @@ tick = () => {
 }
 
 render() {
-  const { cronometro } = this.state;
+  const { timewatch } = this.state;
   return (
     <p>
       {' '}
