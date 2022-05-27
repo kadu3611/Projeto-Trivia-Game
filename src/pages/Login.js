@@ -110,7 +110,9 @@ const mapDispatchToProps = (dispatch) => ({
 
 Login.propTypes = {
   addPlayer: PropTypes.func.isRequired,
-  history: PropTypes.objectOf.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);

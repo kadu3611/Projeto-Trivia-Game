@@ -8,6 +8,8 @@ import { increaseAssertions } from '../redux/actions/index';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
+const ONE_SECOND = 1000;
+const THREE = 3; // MagicNumber
 
 class GameScreen extends Component {
   constructor() {
@@ -17,6 +19,9 @@ class GameScreen extends Component {
       questionsResults: [],
       selectedAsk: {},
       alternatives: [],
+      seconds: 30,
+      button: false,
+      multiplier: 0,
     };
   }
 
@@ -35,6 +40,20 @@ class GameScreen extends Component {
       });
       this.selectQuestion();
     }
+    this.stopwatch();
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.stopwatch);
+  }
+
+  stopwatch = () => {
+    setInterval(() => {
+      this.setState((prevState) => ({
+        seconds: prevState.seconds === 0 ? 0 : prevState.seconds - 1,
+        button: prevState.seconds === 0,
+      }));
+    }, ONE_SECOND);
   }
 
   fetchQuestions = async () => {
@@ -59,25 +78,42 @@ class GameScreen extends Component {
 
       const filteredQuestions = questionsData
         .filter((question) => question.correct_answer !== choosedQuestion.correct_answer);
-
       const answers = [
         ...choosedQuestion.incorrect_answers,
         choosedQuestion.correct_answer,
       ].sort(() => Math.random() - SORT_WITH_NEGATIVE_NUMBERS);
 
+      let questionMultiplier = 0;
+      if (choosedQuestion.difficulty === 'hard') {
+        questionMultiplier = THREE;
+      } else if (choosedQuestion.difficulty === 'medium') {
+        questionMultiplier = 2;
+      } else {
+        questionMultiplier = 1;
+      }
+
       this.setState({
         selectedAsk: choosedQuestion,
         alternatives: answers,
         questionsResults: filteredQuestions,
+        seconds: 30,
+        multiplier: questionMultiplier,
       });
     } else {
       history.push('/feedback');
     }
   }
 
-  render() {
-    const { selectedAsk, isLoading, alternatives, currentTime } = this.state;
+  sendScore = () => {
+    const { seconds, multiplier } = this.state;
     const { newScore } = this.props;
+    newScore({ seconds, multiplier });
+  }
+
+  render() {
+    const { selectedAsk, isLoading, alternatives,
+      currentTime, seconds, button } = this.state;
+
     if (isLoading) {
       return (
         <>
@@ -89,6 +125,11 @@ class GameScreen extends Component {
     return (
       <>
         <Header />
+        <p>
+          Time:
+          {' '}
+          <span>{seconds}</span>
+        </p>
         <main>
           <section>
             <p>{currentTime}</p>
@@ -104,8 +145,9 @@ class GameScreen extends Component {
                   <button
                     key={ answer }
                     type="button"
-                    onClick={ () => newScore() }
+                    onClick={ this.sendScore }
                     data-testid="correct-answer"
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -114,6 +156,7 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid={ `wrong-answer-${index}` }
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -141,7 +184,7 @@ GameScreen.propTypes = {
   newScore: PropTypes.func.isRequired,
 };
 const mapDispatchToProps = (dispatch) => ({
-  newScore: (score) => dispatch(increaseAssertions(score)),
+  newScore: (scoreData) => dispatch(increaseAssertions(scoreData)),
 });
 
 export default connect(null, mapDispatchToProps)(GameScreen);
