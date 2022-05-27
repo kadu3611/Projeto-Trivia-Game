@@ -3,7 +3,7 @@ export const CREATE_PLAYER = 'CREATE_PLAYER';
 export const REQUEST_API = 'REQUEST_API';
 export const REQUEST_API_SUCCESS = 'REQUEST_API_SUCCESS';
 export const REQUEST_API_FAILURE = 'REQUEST_API_FAILURE';
-export const PLAY_ASSERTIONS = 'PLAY_ASSERTIONS';
+export const INCREASE_ASSERTIONS = 'INCREASE_ASSERTIONS';
 
 export const createPlayer = (value) => ({
   type: CREATE_PLAYER,
