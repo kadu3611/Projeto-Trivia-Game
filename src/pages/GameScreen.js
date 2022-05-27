@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { removeToken, getToken } from '../services/localStorage';
 import Loading from './Loading';
-import '../App.css';
+import { increaseAssertions } from '../redux/actions';
+import './GameScreen.css';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
+const ONE_SECOND = 1000;
+const THREE = 3; // MagicNumber
 
 class GameScreen extends Component {
   constructor() {
@@ -18,6 +22,9 @@ class GameScreen extends Component {
       alternatives: [],
       buttonNext: false,
       clicked: false,
+      seconds: 30,
+      button: false,
+      multiplier: 0,
     };
   }
 
@@ -36,6 +43,20 @@ class GameScreen extends Component {
       });
       this.selectQuestion();
     }
+    this.stopwatch();
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.stopwatch);
+  }
+
+  stopwatch = () => {
+    setInterval(() => {
+      this.setState((prevState) => ({
+        seconds: prevState.seconds === 0 ? 0 : prevState.seconds - 1,
+        button: prevState.seconds === 0,
+      }));
+    }, ONE_SECOND);
   }
 
   fetchQuestions = async () => {
@@ -60,11 +81,19 @@ class GameScreen extends Component {
 
       const filteredQuestions = questionsData
         .filter((question) => question.correct_answer !== choosedQuestion.correct_answer);
-
       const answers = [
         ...choosedQuestion.incorrect_answers,
         choosedQuestion.correct_answer,
       ].sort(() => Math.random() - SORT_WITH_NEGATIVE_NUMBERS);
+
+      let questionMultiplier = 0;
+      if (choosedQuestion.difficulty === 'hard') {
+        questionMultiplier = THREE;
+      } else if (choosedQuestion.difficulty === 'medium') {
+        questionMultiplier = 2;
+      } else {
+        questionMultiplier = 1;
+      }
 
       this.setState({
         selectedAsk: choosedQuestion,
@@ -72,6 +101,8 @@ class GameScreen extends Component {
         questionsResults: filteredQuestions,
         clicked: false,
         buttonNext: false,
+        seconds: 30,
+        multiplier: questionMultiplier,
       });
     } else {
       history.push('/feedback');
@@ -85,8 +116,20 @@ class GameScreen extends Component {
     });
   }
 
+  sendScore = () => {
+    const { seconds, multiplier } = this.state;
+    const { newScore } = this.props;
+    newScore({ seconds, multiplier });
+    this.setState({
+      clicked: true,
+      buttonNext: true,
+    });
+  }
+
   render() {
-    const { selectedAsk, isLoading, alternatives, clicked, buttonNext } = this.state;
+    const { selectedAsk, isLoading, alternatives,
+      currentTime, seconds, button, clicked, buttonNext } = this.state;
+
     if (isLoading) {
       return (
         <>
@@ -98,8 +141,14 @@ class GameScreen extends Component {
     return (
       <>
         <Header />
+        <p>
+          Time:
+          {' '}
+          <span>{seconds}</span>
+        </p>
         <main>
           <section>
+            <p>{currentTime}</p>
             <p data-testid="question-category">{selectedAsk.category}</p>
             <p data-testid="question-text">{selectedAsk.question}</p>
           </section>
@@ -112,9 +161,10 @@ class GameScreen extends Component {
                   <button
                     key={ answer }
                     type="button"
+                    onClick={ this.sendScore }
                     data-testid="correct-answer"
-                    onClick={ this.onClickFun }
                     className={ clicked && 'green' }
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -125,6 +175,7 @@ class GameScreen extends Component {
                     data-testid={ `wrong-answer-${index}` }
                     onClick={ this.onClickFun }
                     className={ clicked && 'red' }
+                    disabled={ button }
                   >
                     { answer }
                   </button>
@@ -151,6 +202,10 @@ GameScreen.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  newScore: PropTypes.func.isRequired,
 };
+const mapDispatchToProps = (dispatch) => ({
+  newScore: (scoreData) => dispatch(increaseAssertions(scoreData)),
+});
 
-export default GameScreen;
+export default connect(null, mapDispatchToProps)(GameScreen);
