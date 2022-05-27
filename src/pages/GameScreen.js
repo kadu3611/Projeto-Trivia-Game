@@ -73,6 +73,11 @@ class GameScreen extends Component {
     }
   }
 
+  onClickFunc = () => {
+    document.getElementById('correct').style.border = '3px solid rgb(6, 240, 15)';
+    document.getElementById('wrong').style.border = '3px solid red';
+  }
+
   render() {
     const { selectedAsk, isLoading, alternatives } = this.state;
     if (isLoading) {
@@ -101,6 +106,8 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid="correct-answer"
+                    id="correct"
+                    onClick={ this.onClickFunc }
                   >
                     { answer }
                   </button>
@@ -109,6 +116,8 @@ class GameScreen extends Component {
                     key={ answer }
                     type="button"
                     data-testid={ `wrong-answer-${index}` }
+                    id="wrong"
+                    onClick={ this.onClickFunc }
                   >
                     { answer }
                   </button>
