@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import Login from './pages/Login';
+import Login from './pages/Login/Login';
 import './App.css';
 import GameScreen from './pages/GameScreen';
 import Settings from './pages/Settings';
