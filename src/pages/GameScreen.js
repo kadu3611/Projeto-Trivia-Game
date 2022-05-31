@@ -55,6 +55,7 @@ class GameScreen extends Component {
       this.setState((prevState) => ({
         seconds: prevState.seconds === 0 ? 0 : prevState.seconds - 1,
         button: prevState.seconds === 0,
+        buttonNext: prevState.seconds === 0,
       }));
     }, ONE_SECOND);
   }
@@ -113,6 +114,8 @@ class GameScreen extends Component {
     this.setState({
       clicked: true,
       buttonNext: true,
+      button: true,
+      seconds: 0,
     });
   }
 
@@ -123,6 +126,8 @@ class GameScreen extends Component {
     this.setState({
       clicked: true,
       buttonNext: true,
+      button: true,
+      seconds: 0,
     });
   }
 
