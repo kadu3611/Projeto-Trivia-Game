@@ -60,9 +60,8 @@ class Login extends Component {
     const { name, email } = this.state;
     return (
       <MainCSS>
-
+        <ImgCss src={ logo } alt="trivia image" />
         <SectionCss>
-          <ImgCss src={ logo } alt="trivia image" />
           <FormCss onSubmit={ this.handleSubmit }>
             <LabelCSS htmlFor="player-name">
               Player Name:
@@ -91,7 +90,7 @@ class Login extends Component {
               type="submit"
               disabled={ this.verifyNameAndEmail() }
             >
-              P L A Y
+              P l a y
             </ButtonCss>
           </FormCss>
           <Link to="/settings">

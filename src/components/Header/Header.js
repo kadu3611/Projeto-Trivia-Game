@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { HeaderCSS } from './Hearder.styles';
 
 class Header extends Component {
   render() {
     const { hashEmail, name, score } = this.props;
     return (
-      <header>
+      <HeaderCSS>
         <img
           data-testid="header-profile-picture"
           src={ `https://www.gravatar.com/avatar/${hashEmail}` }
@@ -22,7 +23,7 @@ class Header extends Component {
             {score}
           </span>
         </p>
-      </header>
+      </HeaderCSS>
     );
   }
 }

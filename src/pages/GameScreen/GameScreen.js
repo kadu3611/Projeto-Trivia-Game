@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Header from '../components/Header';
-import { removeToken, getToken } from '../services/localStorage';
-import Loading from './Loading';
-import { increaseAssertions } from '../redux/actions';
-import './GameScreen.css';
+import Header from '../../components/Header/Header';
+import { removeToken, getToken } from '../../services/localStorage';
+import Loading from '../Loading/Loading';
+import { increaseAssertions } from '../../redux/actions';
+import { DivCSS, ProgressCSS, HDivCSS, SectionQuestionsCSS,
+  DivQuestion, DivCategory, SectionAnswerOptions,
+  ButtonAnswer, DivNext, ButtonNext, MainCSS, DivAnswer } from './GameScreen.styles';
 
 // magic number
 const SORT_WITH_NEGATIVE_NUMBERS = 0.5;
@@ -32,7 +34,6 @@ class GameScreen extends Component {
     const { history } = this.props;
 
     const APIdata = await this.fetchQuestions();
-
     if (APIdata.length === 0) {
       removeToken();
       history.push('/');
@@ -133,71 +134,81 @@ class GameScreen extends Component {
 
   render() {
     const { selectedAsk, isLoading, alternatives,
-      currentTime, seconds, button, clicked, buttonNext } = this.state;
+      seconds, button, clicked, buttonNext } = this.state;
 
     if (isLoading) {
       return (
         <>
           <Header />
-          <Loading />
+          <DivCSS>
+            <Loading />
+          </DivCSS>
         </>
       );
     }
     return (
       <>
         <Header />
-        <p>
-          Time:
-          {' '}
-          <span>{seconds}</span>
-        </p>
-        <main>
-          <section>
-            <p>{currentTime}</p>
-            <p data-testid="question-category">{selectedAsk.category}</p>
-            <p data-testid="question-text">{selectedAsk.question}</p>
-          </section>
-          <section
+        <HDivCSS>
+          <ProgressCSS value={ seconds } max="30" />
+        </HDivCSS>
+        <DivCSS>{seconds}</DivCSS>
+
+        <MainCSS>
+          <SectionQuestionsCSS>
+            <DivCategory data-testid="question-category">
+              {selectedAsk.category}
+              :
+            </DivCategory>
+            <DivQuestion data-testid="question-text">{selectedAsk.question}</DivQuestion>
+          </SectionQuestionsCSS>
+          <SectionAnswerOptions
             data-testid="answer-options"
           >
-            {
-              alternatives.map((answer, index) => (
-                answer === selectedAsk.correct_answer ? (
-                  <button
-                    key={ answer }
-                    type="button"
-                    onClick={ this.sendScore }
-                    data-testid="correct-answer"
-                    className={ clicked && 'green' }
-                    disabled={ button }
-                  >
-                    { answer }
-                  </button>
-                ) : (
-                  <button
-                    key={ answer }
-                    type="button"
-                    data-testid={ `wrong-answer-${index}` }
-                    onClick={ this.onClickFun }
-                    className={ clicked && 'red' }
-                    disabled={ button }
-                  >
-                    { answer }
-                  </button>
-                )
-              ))
-            }
-            { buttonNext && (
-              <button
-                type="button"
-                onClick={ this.selectQuestion }
-                data-testid="btn-next"
-              >
-                Next
-              </button>
-            )}
-          </section>
-        </main>
+            <DivAnswer>
+              {
+                alternatives.map((answer, index) => (
+                  answer === selectedAsk.correct_answer ? (
+                    <ButtonAnswer
+                      key={ answer }
+                      type="button"
+                      onClick={ this.sendScore }
+                      data-testid="correct-answer"
+                      className={ clicked && 'green' }
+                      disabled={ button }
+                    >
+                      { answer }
+                    </ButtonAnswer>
+                  ) : (
+                    <ButtonAnswer
+                      key={ answer }
+                      type="button"
+                      data-testid={ `wrong-answer-${index}` }
+                      onClick={ this.onClickFun }
+                      className={ clicked && 'red' }
+                      disabled={ button }
+                    >
+                      { answer }
+                    </ButtonAnswer>
+                  )
+                ))
+              }
+            </DivAnswer>
+            <DivNext>
+              { buttonNext && (
+
+                <ButtonNext
+                  type="button"
+                  onClick={ this.selectQuestion }
+                  data-testid="btn-next"
+                >
+                  Next
+                </ButtonNext>
+
+              )}
+            </DivNext>
+          </SectionAnswerOptions>
+        </MainCSS>
       </>
     );
   }

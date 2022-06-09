@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Header from '../components/Header';
+import { MainCSSFeedback, PCSS, DivCSS, ButtonCSS } from './Feedback.styles';
+import Header from '../../components/Header/Header';
 
 class Feedback extends Component {
   constructor() {
@@ -44,39 +45,42 @@ class Feedback extends Component {
     const { feedBackScore } = this.state;
     const { score, assertions } = this.props;
     return (
-      <main>
+      <MainCSSFeedback>
         <Header />
-        <p>
-          Feedback score:
-          {' '}
-          <span data-testid="feedback-text">{ feedBackScore }</span>
-        </p>
-        <p>
-          Score Total:
-          <span data-testid="feedback-total-score">{ score }</span>
-        </p>
-        <p>
-          Total question:
-          {' '}
-          <span data-testid="feedback-total-question">{assertions}</span>
-        </p>
-        <button
-          data-testid="btn-play-again"
-          type="button"
-          onClick={ this.clickPlay }
-        >
-          Play Again
+        <DivCSS>
+          <PCSS>
+            Feedback score:
+            {' '}
+            <span data-testid="feedback-text">{ feedBackScore }</span>
+          </PCSS>
+          <PCSS>
+            Score Total:
+            <span data-testid="feedback-total-score">{ score }</span>
+          </PCSS>
+          <PCSS>
+            Total question:
+            {' '}
+            <span data-testid="feedback-total-question">{assertions}</span>
+          </PCSS>
 
-        </button>
-        <button
-          data-testid="btn-ranking"
-          type="button"
-          onClick={ this.clickRanking }
-        >
-          Ranking
+          <ButtonCSS
+            data-testid="btn-play-again"
+            type="button"
+            onClick={ this.clickPlay }
+          >
+            Play Again
 
-        </button>
-      </main>
+          </ButtonCSS>
+          <ButtonCSS
+            data-testid="btn-ranking"
+            type="button"
+            onClick={ this.clickRanking }
+          >
+            Ranking
+
+          </ButtonCSS>
+        </DivCSS>
+      </MainCSSFeedback>
     );
   }
 }

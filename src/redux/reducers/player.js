@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   assertions: 0,
   score: 0,
   gravatarEmail: '',
+  seconds: 0,
 };
 
 const playerReducer = (state = INITIAL_STATE, action) => {
@@ -24,6 +25,7 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       score: state.score + (
         scoreAdder + (action.payload.seconds * action.payload.multiplier)
       ),
+      seconds: action.payload.seconds,
     };
   default:
     return state;

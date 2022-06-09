@@ -9,7 +9,7 @@ import background from '../trivia-back-ground.jpg';
 
 export const ButtonCss = styled.button`
   background-color: ${(props) => (props.disabled ? 'rgb(190 190 190)'
-    : 'rgb(102 211 7)')};
+    : '#42b674')};
   border: none;
   color: ${(props) => (props.disabled ? '4CAF80' : 'white')}; 
   padding: 10px 5px 15px;
@@ -35,13 +35,17 @@ export const SettingCss = styled.button`
   `;
 
 export const SectionCss = styled.section`
-  padding-top: 100px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: auto;
-  height: auto;
+  background-color: white;
+  color: black;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  height: 270px;
+  border-radius: 20%;
 
 `;
 export const FormCss = styled.form`
@@ -60,7 +64,7 @@ export const InputCSS = styled.input`
   border:0;
   border-bottom:1px solid black;  
   background:transparent;
-  padding:8px 50px;
+  padding:8px 30px;
   color:black;
   text-align: center;
   &:focus { 
@@ -79,20 +83,25 @@ export const LabelCSS = styled.label`
   font-size: 15px;
   margin-top: 5px;
   text-decoration: solid 1px black;
-  text-decoration: underline;
 
 `;
 
 export const ImgCss = styled.img`
-  padding-bottom: 20px;
   height: 15vmin;
+  padding-bottom: 10px;
   pointer-events: none;
   align-items: center;
   display: flex;
+  border-radius: 5%;
+  margin-left:auto;
+  margin-right:auto;
   `;
 
 export const MainCSS = styled.main`
-  width: auto;
   background-image:url(${background}) ;
-  padding-bottom: 145px;
+  background-position: center;
+  padding-bottom: 275px;
+  padding-top: 120px;
+  justify-content: center;
+  align-items: center;
   `;
