@@ -40,6 +40,6 @@ Foi desenvolvido um jogo de perguntas e respostas baseado no jogo **Trivia** _(t
   * Inicialize o projeto:
     * `npm start` (uma nova página deve abrir no seu navegador com um texto simples)
     
- ## <h1> DIVIRTA-SE! </h1>
+ <h1 align="center"> DIVIRTA-SE! </h1>
     
     
