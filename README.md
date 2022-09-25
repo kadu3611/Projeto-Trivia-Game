@@ -1,4 +1,4 @@
-# Projeto-Star-Wars
+# Projeto-Trivia-Game
 Projeto feito em REACT.js em detrimento aos estudos na Trybe
 
 # Habilidades desenvolvidas
